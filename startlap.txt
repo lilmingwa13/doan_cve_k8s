@@ -1,0 +1,89 @@
+KHỞI ĐỘNG LAB ĐÚNG CHUẨN (một lệnh)
+
+QUAN TRỌNG — layout hiện hành chạy duy nhất namespace `ai-cve-lab-exposed`.
+- Lab (19091 / 19501 / 19310; sink hash-only 19580) vẫn chạy các version/model
+  dễ tổn thương, nhưng gắn canary giả lập, volume ephemeral và GitHub
+  credential sink nội bộ để đo ranh giới K8s.
+- Không nhập token thật; không có hostPath, Docker socket, privileged Pod hay
+  quyền cluster cho workload.
+
+Mọi hướng dẫn cũ phía dưới có chữ vulnerable/hardened hoặc chain/ACE là lịch
+sử v2. Với layout hiện tại, chỉ dùng:
+
+cd D:\daihoc\Nam4\Doan\lab
+.\scripts\90-start-ai-cve-lab.ps1
+.\scripts\41-capture-beifong-k8s-boundary.ps1
+.\scripts\42-capture-github-mcp-k8s-boundary.ps1
+
+Setup một lần / sau minikube delete:
+.\scripts\10-setup-ai-cve-lab.ps1
+
+Image redeploy hợp lệ: beifong-boundary-model, github-mcp-vuln-observer,
+github-credential-sink, paperclip-v0.3.1.
+
+======================================================================
+
+1. Mở Docker Desktop và chờ trạng thái Engine running.
+2. Mở PowerShell mới, rồi chạy đúng hai dòng dưới. Không chạy 10-setup hoặc
+   92-redeploy trong lần khởi động bình thường.
+
+cd D:\daihoc\Nam4\Doan\lab
+.\scripts\90-start-ai-cve-lab.ps1
+
+Script tự khôi phục context ai-cve-lab nếu kubeconfig rỗng, tự start lại
+Minikube khi Host/Kubelet/APIServer chưa Running, kiểm tra pod, và tạo lại
+toàn bộ port-forward. Kết thúc thành công khi hiện danh sách URL.
+
+Lưu ý: -Full hiện không bổ sung bước nào trong script 90; không cần dùng cho
+lần khởi động thông thường. Chỉ dùng -RecyclePods khi thật sự muốn xóa rồi
+tạo lại các pod lab.
+
+======================================================================
+
+Mở giao diện lab:
+
+http://127.0.0.1:19091/        # Beifong
+http://127.0.0.1:19501/        # GitHub MCP adapter
+http://127.0.0.1:19310/        # Paperclip
+http://127.0.0.1:19580/events  # credential sink hash-only
+
+Nếu muốn ép recreate Pod luôn cho sạch:
+
+cd D:\daihoc\Nam4\Doan\lab
+.\scripts\90-start-ai-cve-lab.ps1 -RecyclePods
+Kiểm tra trạng thái
+cd D:\daihoc\Nam4\Doan\lab
+.\scripts\91-status-ai-cve-lab.ps1
+Tắt lab
+
+Tắt port-forward và stop minikube:
+
+cd D:\daihoc\Nam4\Doan\lab
+.\scripts\99-stop-ai-cve-lab.ps1
+
+Chỉ tắt port-forward, giữ minikube chạy:
+
+cd D:\daihoc\Nam4\Doan\lab
+.\scripts\99-stop-ai-cve-lab.ps1 -KeepMinikube
+
+Lưu ý nhỏ: khi dùng port-forward, nên giữ cửa sổ PowerShell đó mở. Nếu đóng terminal thì tunnel local 127.0.0.1:19091, 19501, 19310 và 19580 sẽ mất.
+
+======================================================================
+Dựng lab từ đầu (build image + apply manifest), chạy 1 lần:
+
+cd D:\daihoc\Nam4\Doan\lab
+.\scripts\10-setup-ai-cve-lab.ps1
+# rồi bật port-forward:
+.\scripts\90-start-ai-cve-lab.ps1
+
+Sau khi sửa code app (đổi 1 image thì lab hiện đúng code mới):
+
+# lab phải đang chạy (đã 90-start)
+.\scripts\92-redeploy-ai-cve-lab.ps1 -Images beifong-boundary-model
+.\scripts\92-redeploy-ai-cve-lab.ps1            # rebuild + redeploy tất cả
+# port-forward tới pod vừa restart bị mất -> bật lại:
+.\scripts\90-start-ai-cve-lab.ps1
+
+Ghi nhớ: các image dùng tag được khai báo trực tiếp trong manifest (ví dụ
+`chapter3-v1` hoặc `chapter3-boundary-v1`). `minikube image load` cùng tag chỉ
+ghi đè khi Minikube đang chạy.

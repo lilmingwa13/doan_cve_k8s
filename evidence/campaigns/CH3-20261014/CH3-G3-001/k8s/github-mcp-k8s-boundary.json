@@ -1,0 +1,139 @@
+﻿{
+    "schemaVersion":  "github-mcp-k8s-boundary-v2",
+    "capturedAtUtc":  "2026-10-14T09:02:11.4467900Z",
+    "campaignId":  "CH3-20261014",
+    "runId":  "CH3-G3-001",
+    "checkpoint":  "final",
+    "purpose":  "GitHub MCP session/egress boundary inventory; sink records hashes and labels only",
+    "namespace":  "ai-cve-lab-exposed",
+    "workloads":  {
+                      "githubMcp":  {
+                                        "deployment":  "github-mcp-exposed",
+                                        "podName":  "github-mcp-exposed-75cbbbb85c-njmgv",
+                                        "podUid":  "1857e05e-8a4f-41cd-a529-84c850e1e6db",
+                                        "phase":  "Running",
+                                        "node":  "ai-cve-lab",
+                                        "serviceAccount":  "github-mcp-workload",
+                                        "automountServiceAccountToken":  false,
+                                        "container":  {
+                                                          "name":  "github-mcp-agent",
+                                                          "image":  "lab/github-mcp-vuln-observer:chapter3-boundary-v2",
+                                                          "imageId":  "docker://sha256:75f04e56c8fbd4d9f46d8c0eab7fa17240fbdc0949075bf71e2fddce6115db95",
+                                                          "containerId":  "docker://f76df5f9d2b9cd9377c216cba45bcbacfa22a0f3c5b2f739a916222a1bc7e6bf",
+                                                          "restartCount":  0,
+                                                          "mounts":  [
+
+                                                                     ]
+                                                      }
+                                    },
+                      "credentialSink":  {
+                                             "deployment":  "github-credential-sink",
+                                             "podName":  "github-credential-sink-7f7968c87f-tl8rp",
+                                             "podUid":  "8d898758-c7b9-415b-baf6-5a867c77cb00",
+                                             "phase":  "Running",
+                                             "node":  "ai-cve-lab",
+                                             "serviceAccount":  "credential-sink",
+                                             "automountServiceAccountToken":  false,
+                                             "container":  {
+                                                               "name":  "credential-sink",
+                                                               "image":  "lab/github-credential-sink:chapter3-boundary-v1",
+                                                               "imageId":  "docker://sha256:0d8491af2b8b4a7296e1967170137cfd7beab021a7ec3d90668331d7d14ddf15",
+                                                               "containerId":  "docker://d1b7c4ad3e59c33f339e813b17d96cb72134d085aee368d4a389d7a07382fe73",
+                                                               "restartCount":  0,
+                                                               "mounts":  [
+                                                                              {
+                                                                                  "name":  "tmp",
+                                                                                  "mountPath":  "/tmp",
+                                                                                  "readOnly":  false
+                                                                              }
+                                                                          ]
+                                                           }
+                                         }
+                  },
+    "networkPolicy":  {
+                          "name":  "github-mcp-observer-egress",
+                          "podSelector":  {
+                                              "matchLabels":  {
+                                                                  "app":  "github-mcp-exposed"
+                                                              }
+                                          },
+                          "policyTypes":  [
+                                              "Egress"
+                                          ],
+                          "egress":  [
+                                         {
+                                             "ports":  [
+                                                           {
+                                                               "port":  8080,
+                                                               "protocol":  "TCP"
+                                                           }
+                                                       ],
+                                             "to":  [
+                                                        {
+                                                            "podSelector":  {
+                                                                                "matchLabels":  {
+                                                                                                    "app":  "github-credential-sink"
+                                                                                                }
+                                                                            }
+                                                        }
+                                                    ]
+                                         },
+                                         {
+                                             "ports":  [
+                                                           {
+                                                               "port":  53,
+                                                               "protocol":  "UDP"
+                                                           },
+                                                           {
+                                                               "port":  53,
+                                                               "protocol":  "TCP"
+                                                           }
+                                                       ],
+                                             "to":  [
+                                                        {
+                                                            "namespaceSelector":  {
+
+                                                                                  },
+                                                            "podSelector":  {
+                                                                                "matchLabels":  {
+                                                                                                    "k8s-app":  "kube-dns"
+                                                                                                }
+                                                                            }
+                                                        }
+                                                    ]
+                                         }
+                                     ]
+                      },
+    "credentialSinkEvents":  {
+                                 "count":  2,
+                                 "events":  [
+                                                {
+                                                    "credentialOwner":  "A",
+                                                    "credentialSha256_20":  "afaa1e6116079cf3b3b7",
+                                                    "credentialSource":  "session input",
+                                                    "crossSessionCredentialUse":  false,
+                                                    "eventId":  "84f6de2b-e78a-4e06-ad30-d415f832b0ae",
+                                                    "labMode":  "exposed",
+                                                    "observedAtUnix":  1791967684,
+                                                    "querySha256_20":  "52b25a160d833044e127",
+                                                    "receiver":  "github-credential-sink",
+                                                    "repository":  "lab/example-repository",
+                                                    "requesterSession":  "A"
+                                                },
+                                                {
+                                                    "credentialOwner":  "A",
+                                                    "credentialSha256_20":  "afaa1e6116079cf3b3b7",
+                                                    "credentialSource":  "process-global os.environ fallback",
+                                                    "crossSessionCredentialUse":  true,
+                                                    "eventId":  "5b3d6389-557f-4026-8e44-39925de6ba32",
+                                                    "labMode":  "exposed",
+                                                    "observedAtUnix":  1791968307,
+                                                    "querySha256_20":  "52b25a160d833044e127",
+                                                    "receiver":  "github-credential-sink",
+                                                    "repository":  "lab/example-repository",
+                                                    "requesterSession":  "B"
+                                                }
+                                            ]
+                             },
+    "interpretationLimit":  "Sink events show only which synthetic credential fingerprint reached the local sink. They do not show a call to GitHub, OpenAI, or an MCP server."
+}

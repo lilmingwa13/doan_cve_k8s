@@ -1,0 +1,168 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: beifong-exposed
+  namespace: ai-cve-lab-exposed
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: beifong-exposed } }
+  template:
+    metadata:
+      labels: { app: beifong-exposed, lab.ai-cve/component: beifong, lab.ai-cve/variant: exposed }
+    spec:
+      serviceAccountName: beifong-workload
+      automountServiceAccountToken: false
+      securityContext: { fsGroup: 1000 }
+      containers:
+        - name: beifong
+          image: lab/beifong-boundary-model:chapter3-v1
+          imagePullPolicy: IfNotPresent
+          ports: [{ name: http, containerPort: 7000 }]
+          env:
+            - name: PORT
+              value: "7000"
+            - name: LAB_MODE
+              valueFrom: { configMapKeyRef: { name: ai-lab-runtime-config, key: LAB_MODE } }
+          volumeMounts:
+            - name: boundary-canaries
+              mountPath: /var/run/lab-canary
+              readOnly: true
+      volumes:
+        - name: boundary-canaries
+          secret: { secretName: boundary-canaries }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: beifong-exposed, namespace: ai-cve-lab-exposed }
+spec:
+  selector: { app: beifong-exposed }
+  ports: [{ name: http, port: 80, targetPort: 7000 }]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: github-credential-sink
+  namespace: ai-cve-lab-exposed
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: github-credential-sink } }
+  template:
+    metadata:
+      labels: { app: github-credential-sink, lab.ai-cve/component: credential-sink }
+    spec:
+      serviceAccountName: credential-sink
+      automountServiceAccountToken: false
+      securityContext: { runAsNonRoot: true, runAsUser: 10001, runAsGroup: 10001 }
+      containers:
+        - name: credential-sink
+          image: lab/github-credential-sink:chapter3-boundary-v1
+          imagePullPolicy: IfNotPresent
+          ports: [{ name: http, containerPort: 8080 }]
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: { drop: ["ALL"] }
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata: { name: github-credential-sink, namespace: ai-cve-lab-exposed }
+spec:
+  selector: { app: github-credential-sink }
+  ports: [{ name: http, port: 8080, targetPort: 8080 }]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: github-mcp-exposed
+  namespace: ai-cve-lab-exposed
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: github-mcp-exposed } }
+  template:
+    metadata:
+      labels: { app: github-mcp-exposed, lab.ai-cve/component: github-mcp, lab.ai-cve/variant: exposed }
+    spec:
+      serviceAccountName: github-mcp-workload
+      automountServiceAccountToken: false
+      containers:
+        - name: github-mcp-agent
+          image: lab/github-mcp-vuln-observer:chapter3-boundary-v2
+          imagePullPolicy: IfNotPresent
+          ports: [{ name: http, containerPort: 8501 }]
+          env:
+            - name: LAB_MODE
+              valueFrom: { configMapKeyRef: { name: ai-lab-runtime-config, key: LAB_MODE } }
+            - name: LAB_GITHUB_SINK_URL
+              valueFrom: { configMapKeyRef: { name: ai-lab-runtime-config, key: GITHUB_LAB_SINK_URL } }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: github-mcp-exposed, namespace: ai-cve-lab-exposed }
+spec:
+  selector: { app: github-mcp-exposed }
+  ports: [{ name: http, port: 80, targetPort: 8501 }]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: paperclip-exposed
+  namespace: ai-cve-lab-exposed
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: paperclip-exposed } }
+  template:
+    metadata:
+      labels: { app: paperclip-exposed, lab.ai-cve/component: paperclip, lab.ai-cve/variant: exposed }
+    spec:
+      serviceAccountName: paperclip-server
+      automountServiceAccountToken: false
+      securityContext: { fsGroup: 1000 }
+      containers:
+        - name: paperclip
+          image: lab/paperclip-v0.3.1-ui-lab:chapter3-v1
+          imagePullPolicy: IfNotPresent
+          ports: [{ name: local, containerPort: 3100 }]
+          env:
+            - name: LAB_MODE
+              valueFrom: { configMapKeyRef: { name: ai-lab-runtime-config, key: LAB_MODE } }
+          volumeMounts:
+            - name: paperclip-data
+              mountPath: /paperclip
+            # Git worktrees created by provisionCommand live under this
+            # disposable Kubernetes volume; it never reaches node storage.
+            - name: workspace-evidence
+              mountPath: /workspace/repo/.paperclip
+            - name: boundary-canaries
+              mountPath: /var/run/lab-canary
+              readOnly: true
+        - name: proxy
+          image: nginx:1.27-alpine
+          ports: [{ name: http, containerPort: 3101 }]
+          command: ["nginx", "-g", "daemon off;"]
+          volumeMounts:
+            - name: proxy-config
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+              readOnly: true
+      volumes:
+        - name: paperclip-data
+          emptyDir: {}
+        - name: workspace-evidence
+          emptyDir: {}
+        - name: boundary-canaries
+          secret: { secretName: boundary-canaries }
+        - name: proxy-config
+          configMap: { name: paperclip-proxy-nginx }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: paperclip-exposed, namespace: ai-cve-lab-exposed }
+spec:
+  selector: { app: paperclip-exposed }
+  ports: [{ name: http, port: 80, targetPort: 3101 }]

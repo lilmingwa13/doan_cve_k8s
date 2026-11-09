@@ -1,0 +1,254 @@
+﻿{
+    "schemaVersion":  "chapter3-run-state-v1",
+    "campaignId":  "CH3-20261014",
+    "runId":  "CH3-G3-001",
+    "checkpoint":  "after-b",
+    "capturedAtUtc":  "2026-10-14T08:59:39.1685640Z",
+    "namespace":  "ai-cve-lab-exposed",
+    "purpose":  "Per-run runtime baseline/checkpoint. It does not read Secret values, environment values, or API keys.",
+    "cleanState":  null,
+    "pods":  [
+                 {
+                     "name":  "beifong-exposed-54f86766c5-g6bms",
+                     "uid":  "54d97b10-533a-4896-9c82-cfc3f93df662",
+                     "phase":  "Running",
+                     "node":  "ai-cve-lab",
+                     "serviceAccount":  "beifong-workload",
+                     "automountServiceAccountToken":  false,
+                     "createdAt":  "2026-10-14T08:27:37Z",
+                     "containers":  [
+                                        {
+                                            "name":  "beifong",
+                                            "image":  "lab/beifong-boundary-model:chapter3-v1",
+                                            "imageId":  "docker://sha256:52d7e1d6ab6b2e82a0edf2c96146f1c1dde4b88648246fc04d85eb80a72284db",
+                                            "containerId":  "docker://285c681a433243be625ac046faac81342367c0cc629f2548acb1a63b14322717",
+                                            "restartCount":  0,
+                                            "startedAt":  "2026-10-14T08:27:39Z",
+                                            "mounts":  [
+                                                           {
+                                                               "name":  "boundary-canaries",
+                                                               "mountPath":  "/var/run/lab-canary",
+                                                               "readOnly":  true
+                                                           }
+                                                       ]
+                                        }
+                                    ]
+                 },
+                 {
+                     "name":  "github-credential-sink-7f7968c87f-tl8rp",
+                     "uid":  "8d898758-c7b9-415b-baf6-5a867c77cb00",
+                     "phase":  "Running",
+                     "node":  "ai-cve-lab",
+                     "serviceAccount":  "credential-sink",
+                     "automountServiceAccountToken":  false,
+                     "createdAt":  "2026-10-14T08:27:37Z",
+                     "containers":  [
+                                        {
+                                            "name":  "credential-sink",
+                                            "image":  "lab/github-credential-sink:chapter3-boundary-v1",
+                                            "imageId":  "docker://sha256:0d8491af2b8b4a7296e1967170137cfd7beab021a7ec3d90668331d7d14ddf15",
+                                            "containerId":  "docker://d1b7c4ad3e59c33f339e813b17d96cb72134d085aee368d4a389d7a07382fe73",
+                                            "restartCount":  0,
+                                            "startedAt":  "2026-10-14T08:27:39Z",
+                                            "mounts":  [
+                                                           {
+                                                               "name":  "tmp",
+                                                               "mountPath":  "/tmp",
+                                                               "readOnly":  false
+                                                           }
+                                                       ]
+                                        }
+                                    ]
+                 },
+                 {
+                     "name":  "github-mcp-exposed-75cbbbb85c-njmgv",
+                     "uid":  "1857e05e-8a4f-41cd-a529-84c850e1e6db",
+                     "phase":  "Running",
+                     "node":  "ai-cve-lab",
+                     "serviceAccount":  "github-mcp-workload",
+                     "automountServiceAccountToken":  false,
+                     "createdAt":  "2026-10-14T08:27:38Z",
+                     "containers":  [
+                                        {
+                                            "name":  "github-mcp-agent",
+                                            "image":  "lab/github-mcp-vuln-observer:chapter3-boundary-v2",
+                                            "imageId":  "docker://sha256:75f04e56c8fbd4d9f46d8c0eab7fa17240fbdc0949075bf71e2fddce6115db95",
+                                            "containerId":  "docker://f76df5f9d2b9cd9377c216cba45bcbacfa22a0f3c5b2f739a916222a1bc7e6bf",
+                                            "restartCount":  0,
+                                            "startedAt":  "2026-10-14T08:27:39Z",
+                                            "mounts":  [
+                                                           {
+                                                               "name":  null,
+                                                               "mountPath":  null,
+                                                               "readOnly":  false
+                                                           }
+                                                       ]
+                                        }
+                                    ]
+                 },
+                 {
+                     "name":  "paperclip-exposed-649ff6678-lckcc",
+                     "uid":  "d7c9a84d-5557-4356-923a-cf33c0d6b037",
+                     "phase":  "Running",
+                     "node":  "ai-cve-lab",
+                     "serviceAccount":  "paperclip-server",
+                     "automountServiceAccountToken":  false,
+                     "createdAt":  "2026-10-14T08:27:38Z",
+                     "containers":  [
+                                        {
+                                            "name":  "paperclip",
+                                            "image":  "lab/paperclip-v0.3.1-ui-lab:chapter3-v1",
+                                            "imageId":  "docker://sha256:81aa0a753f8b3102af65f21800e708e3f12d97adc5c1511bbbcedf4764b4e0fa",
+                                            "containerId":  "docker://ff328b1dc37214c64e4e24819128c39b6ac3702c17a1803b8ef29c1b162f6de7",
+                                            "restartCount":  0,
+                                            "startedAt":  "2026-10-14T08:27:39Z",
+                                            "mounts":  [
+                                                           {
+                                                               "name":  "paperclip-data",
+                                                               "mountPath":  "/paperclip",
+                                                               "readOnly":  false
+                                                           },
+                                                           {
+                                                               "name":  "workspace-evidence",
+                                                               "mountPath":  "/workspace/repo/.paperclip",
+                                                               "readOnly":  false
+                                                           },
+                                                           {
+                                                               "name":  "boundary-canaries",
+                                                               "mountPath":  "/var/run/lab-canary",
+                                                               "readOnly":  true
+                                                           }
+                                                       ]
+                                        },
+                                        {
+                                            "name":  "proxy",
+                                            "image":  "nginx:1.27-alpine",
+                                            "imageId":  "docker-pullable://nginx@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10",
+                                            "containerId":  "docker://184ad3016c7629c7ddf92e776ba6a03add2751ddf322400352a01207bf5b0c44",
+                                            "restartCount":  0,
+                                            "startedAt":  "2026-10-14T08:27:40Z",
+                                            "mounts":  [
+                                                           {
+                                                               "name":  "proxy-config",
+                                                               "mountPath":  "/etc/nginx/nginx.conf",
+                                                               "readOnly":  true
+                                                           }
+                                                       ]
+                                        }
+                                    ]
+                 }
+             ],
+    "githubMcpPidOne":  {
+                            "pid":  1,
+                            "processStartTicks":  "544203",
+                            "commandLine":  "/usr/local/bin/python3.11 /usr/local/bin/streamlit run /app/github_agent.py --server.address=0.0.0.0 --server.port=8501 --server.headless=true --server.enableCORS=false --server.enableXsrfProtection=false"
+                        },
+    "networkPolicies":  [
+                            {
+                                "name":  "github-mcp-observer-egress",
+                                "podSelector":  {
+                                                    "matchLabels":  {
+                                                                        "app":  "github-mcp-exposed"
+                                                                    }
+                                                },
+                                "policyTypes":  [
+                                                    "Egress"
+                                                ],
+                                "egress":  [
+                                               {
+                                                   "ports":  [
+                                                                 {
+                                                                     "port":  8080,
+                                                                     "protocol":  "TCP"
+                                                                 }
+                                                             ],
+                                                   "to":  [
+                                                              {
+                                                                  "podSelector":  {
+                                                                                      "matchLabels":  {
+                                                                                                          "app":  "github-credential-sink"
+                                                                                                      }
+                                                                                  }
+                                                              }
+                                                          ]
+                                               },
+                                               {
+                                                   "ports":  [
+                                                                 {
+                                                                     "port":  53,
+                                                                     "protocol":  "UDP"
+                                                                 },
+                                                                 {
+                                                                     "port":  53,
+                                                                     "protocol":  "TCP"
+                                                                 }
+                                                             ],
+                                                   "to":  [
+                                                              {
+                                                                  "namespaceSelector":  {
+
+                                                                                        },
+                                                                  "podSelector":  {
+                                                                                      "matchLabels":  {
+                                                                                                          "k8s-app":  "kube-dns"
+                                                                                                      }
+                                                                                  }
+                                                              }
+                                                          ]
+                                               }
+                                           ]
+                            }
+                        ],
+    "kubeSystemPodImages":  [
+                                {
+                                    "name":  "coredns-7d764666f9-tkb9n",
+                                    "namespace":  "kube-system",
+                                    "images":  [
+                                                   "registry.k8s.io/coredns/coredns:v1.13.1"
+                                               ]
+                                },
+                                {
+                                    "name":  "etcd-ai-cve-lab",
+                                    "namespace":  "kube-system",
+                                    "images":  [
+                                                   "registry.k8s.io/etcd:3.6.6-0"
+                                               ]
+                                },
+                                {
+                                    "name":  "kube-apiserver-ai-cve-lab",
+                                    "namespace":  "kube-system",
+                                    "images":  [
+                                                   "registry.k8s.io/kube-apiserver:v1.35.1"
+                                               ]
+                                },
+                                {
+                                    "name":  "kube-controller-manager-ai-cve-lab",
+                                    "namespace":  "kube-system",
+                                    "images":  [
+                                                   "registry.k8s.io/kube-controller-manager:v1.35.1"
+                                               ]
+                                },
+                                {
+                                    "name":  "kube-proxy-s6l2s",
+                                    "namespace":  "kube-system",
+                                    "images":  [
+                                                   "registry.k8s.io/kube-proxy:v1.35.1"
+                                               ]
+                                },
+                                {
+                                    "name":  "kube-scheduler-ai-cve-lab",
+                                    "namespace":  "kube-system",
+                                    "images":  [
+                                                   "registry.k8s.io/kube-scheduler:v1.35.1"
+                                               ]
+                                },
+                                {
+                                    "name":  "storage-provisioner",
+                                    "namespace":  "kube-system",
+                                    "images":  [
+                                                   "gcr.io/k8s-minikube/storage-provisioner:v5"
+                                               ]
+                                }
+                            ],
+    "campaignBaseline":  "D:\\daihoc\\Nam4\\Doan\\lab\\evidence\\campaigns\\CH3-20261014\\campaign-baseline.json"
+}

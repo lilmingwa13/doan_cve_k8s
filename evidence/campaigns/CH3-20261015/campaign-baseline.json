@@ -1,0 +1,104 @@
+﻿{
+    "schemaVersion":  "chapter3-campaign-baseline-v1",
+    "campaignId":  "CH3-20261015",
+    "capturedAtUtc":  "2026-10-15T07:40:12.5859745Z",
+    "purpose":  "Static source/build and environment provenance for a Chapter III campaign; no Secret or API-key values recorded.",
+    "sourceRepositories":  [
+                               {
+                                   "path":  "D:\\daihoc\\Nam4\\Doan\\lab\\sources\\awesome-llm-apps",
+                                   "commit":  "e46690f99c3f08be80a9877fab52acacf7ab8251",
+                                   "statusPorcelain":  [
+                                                           " M advanced_ai_agents/multi_agent_apps/ai_news_and_podcast_agents/beifong/main.py",
+                                                           " M advanced_ai_agents/multi_agent_apps/ai_news_and_podcast_agents/web/package.json",
+                                                           " M mcp_ai_agents/github_mcp_agent/github_agent.py",
+                                                           " M mcp_ai_agents/github_mcp_agent/requirements.txt",
+                                                           "?? advanced_ai_agents/multi_agent_apps/ai_news_and_podcast_agents/web/package-lock.json",
+                                                           "?? mcp_ai_agents/github_mcp_agent/__pycache__/"
+                                                       ]
+                               },
+                               {
+                                   "path":  "D:\\daihoc\\Nam4\\Doan\\lab\\sources\\paperclip",
+                                   "commit":  "63c62e3ada077bac45292f3d2779bd48a8831cda",
+                                   "statusPorcelain":  [
+                                                           " M ui/src/adapters/process/config-fields.tsx",
+                                                           " M ui/src/components/AgentConfigForm.tsx",
+                                                           " M ui/src/components/NewAgentDialog.tsx",
+                                                           " M ui/src/components/OnboardingWizard.tsx",
+                                                           " M ui/src/components/agent-config-primitives.tsx",
+                                                           " M ui/src/pages/InviteLanding.tsx",
+                                                           " M ui/src/pages/NewAgent.tsx"
+                                                       ]
+                               }
+                           ],
+    "relevantFileHashes":  [
+                               {
+                                   "path":  "sources\\awesome-llm-apps\\advanced_ai_agents\\multi_agent_apps\\ai_news_and_podcast_agents\\beifong\\main.py",
+                                   "sha256":  "d6238a02308af6bc3d21e0e286e5d4b4cdfdc884dcd0b6f7c1ef91839e215753"
+                               },
+                               {
+                                   "path":  "images\\beifong-boundary-model\\Dockerfile",
+                                   "sha256":  "ca14a32966866150aba5e8081b3bacdc20da0b6f0208078ea4cd8027820f05da"
+                               },
+                               {
+                                   "path":  "images\\github-mcp-lab-adapter\\github_agent.py",
+                                   "sha256":  "a92f42e628a27a1840c9ba50e2095abc56d33f2df073dd03f796f19041324302"
+                               },
+                               {
+                                   "path":  "images\\github-mcp-lab-adapter\\Dockerfile",
+                                   "sha256":  "3aeccf73e09dbcc939ba7a800b5f6906a8ed27fdba46b5380c5b9fa2a687cd31"
+                               },
+                               {
+                                   "path":  "images\\paperclip\\Dockerfile",
+                                   "sha256":  "48a8f3625d6b0cbb4744eabb8c662c3da10e84e0ad689ffde596e3ba46696f1f"
+                               },
+                               {
+                                   "path":  "sources\\paperclip\\server\\src\\middleware\\auth.ts",
+                                   "sha256":  "03388ebb57aab4117393c4f5fb5f293c5f2584898bc9465ee2f8bcee4029ee80"
+                               },
+                               {
+                                   "path":  "sources\\paperclip\\server\\src\\routes\\agents.ts",
+                                   "sha256":  "16b2179963be83af7a88560a6d3aef4e7f932ab98f30662b9ce41244975fe6e3"
+                               },
+                               {
+                                   "path":  "sources\\paperclip\\server\\src\\services\\workspace-runtime.ts",
+                                   "sha256":  "93683a524e392222aa4ab1ce523a534a2ae08b4400e2e24ed63a31b44132f2a6"
+                               },
+                               {
+                                   "path":  "k8s\\exposed\\02-networkpolicy.yaml",
+                                   "sha256":  "6c0e7854be117a252126e962060020b0e131769192be70234b2ca2ddd6dce542"
+                               }
+                           ],
+    "tooling":  {
+                    "minikubeVersion":  "minikube version: v1.38.1\r\ncommit: c93a4cb9311efc66b90d33ea03f75f2c4120e9b0",
+                    "kubernetesVersion":  {
+                                              "clientVersion":  {
+                                                                    "major":  "1",
+                                                                    "minor":  "35",
+                                                                    "gitVersion":  "v1.35.1",
+                                                                    "gitCommit":  "8fea90b45245ef5c8ba54e7ae044d3e777c22500",
+                                                                    "gitTreeState":  "clean",
+                                                                    "buildDate":  "2026-02-10T12:55:59Z",
+                                                                    "goVersion":  "go1.25.6",
+                                                                    "compiler":  "gc",
+                                                                    "platform":  "windows/amd64"
+                                                                },
+                                              "kustomizeVersion":  "v5.7.1",
+                                              "serverVersion":  {
+                                                                    "major":  "1",
+                                                                    "minor":  "35",
+                                                                    "emulationMajor":  "1",
+                                                                    "emulationMinor":  "35",
+                                                                    "minCompatibilityMajor":  "1",
+                                                                    "minCompatibilityMinor":  "34",
+                                                                    "gitVersion":  "v1.35.1",
+                                                                    "gitCommit":  "8fea90b45245ef5c8ba54e7ae044d3e777c22500",
+                                                                    "gitTreeState":  "clean",
+                                                                    "buildDate":  "2026-02-10T12:53:14Z",
+                                                                    "goVersion":  "go1.25.6",
+                                                                    "compiler":  "gc",
+                                                                    "platform":  "linux/amd64"
+                                                                }
+                                          },
+                    "dockerVersion":  "\"25.0.2\""
+                }
+}

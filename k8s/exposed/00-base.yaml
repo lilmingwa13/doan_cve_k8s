@@ -1,0 +1,77 @@
+# Scope experiment namespace.  It deliberately adds only harmless, synthetic
+# Kubernetes canaries.  No hostPath, Docker socket, privileged container,
+# node credential, or real secret is present in this lab.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ai-cve-lab-exposed
+  labels:
+    lab.ai-cve/name: scoped-exposure
+    lab.ai-cve/purpose: k8s-boundary-observation
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata: { name: beifong-workload, namespace: ai-cve-lab-exposed }
+automountServiceAccountToken: false
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata: { name: github-mcp-workload, namespace: ai-cve-lab-exposed }
+automountServiceAccountToken: false
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata: { name: paperclip-server, namespace: ai-cve-lab-exposed }
+automountServiceAccountToken: false
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata: { name: credential-sink, namespace: ai-cve-lab-exposed }
+automountServiceAccountToken: false
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ai-lab-runtime-config
+  namespace: ai-cve-lab-exposed
+data:
+  LAB_MODE: exposed
+  GITHUB_LAB_SINK_URL: http://github-credential-sink:8080/observe
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: boundary-canaries
+  namespace: ai-cve-lab-exposed
+  labels: { lab.ai-cve/data: synthetic-only }
+type: Opaque
+stringData:
+  beifong-outside-audio.txt: "LAB_CANARY_BEIFONG_OUTSIDE_AUDIO_NOT_A_REAL_SECRET"
+  paperclip-mount-scope.txt: "LAB_CANARY_PAPERCLIP_MOUNT_SCOPE_NOT_A_REAL_SECRET"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: paperclip-proxy-nginx
+  namespace: ai-cve-lab-exposed
+data:
+  nginx.conf: |
+    pid /tmp/nginx.pid;
+    events {}
+    http {
+      client_body_temp_path /tmp/client_temp;
+      proxy_temp_path /tmp/proxy_temp;
+      fastcgi_temp_path /tmp/fastcgi_temp;
+      uwsgi_temp_path /tmp/uwsgi_temp;
+      scgi_temp_path /tmp/scgi_temp;
+      upstream paperclip_local { server 127.0.0.1:3100; }
+      server {
+        listen 3101;
+        location / {
+          proxy_pass http://paperclip_local;
+          proxy_set_header Host $host;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto http;
+        }
+      }
+    }

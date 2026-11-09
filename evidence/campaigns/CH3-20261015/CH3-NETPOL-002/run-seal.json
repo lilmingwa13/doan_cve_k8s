@@ -1,0 +1,19 @@
+﻿{
+    "schemaVersion":  "chapter3-run-seal-v1",
+    "campaignId":  "CH3-20261015",
+    "runId":  "CH3-NETPOL-002",
+    "sealedAtUtc":  "2026-10-15T08:01:25.1260661Z",
+    "purpose":  "Integrity index for one Chapter III run. Hashes identify files; this seal does not assert that a result is positive.",
+    "files":  [
+                  {
+                      "relativePath":  "k8s\\github-mcp-networkpolicy-measurement.json",
+                      "bytes":  7275,
+                      "sha256":  "342f026dd0bbc07df65cdfdbb1a24f6d63a62aad50592f5eb03a9f5810f8a5e7"
+                  },
+                  {
+                      "relativePath":  "runtime-baseline.json",
+                      "bytes":  16778,
+                      "sha256":  "31751130bca0b7f6645f93c5b2e506dfb80147a0beef6e0d263b6857d6eb7b84"
+                  }
+              ]
+}

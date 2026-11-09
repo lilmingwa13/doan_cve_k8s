@@ -1,0 +1,36 @@
+﻿{
+    "schemaVersion":  "beifong-k8s-boundary-v2",
+    "capturedAtUtc":  "2026-10-15T06:55:26.2078791Z",
+    "campaignId":  "CH3-20261014",
+    "runId":  "CH3-BEIFONG-001",
+    "checkpoint":  "final",
+    "purpose":  "Beifong Pod filesystem/volume boundary inventory; no canary contents collected",
+    "namespace":  "ai-cve-lab-exposed",
+    "workload":  {
+                     "deployment":  "beifong-exposed",
+                     "podName":  "beifong-exposed-54f86766c5-jgk7z",
+                     "podUid":  "05417866-b37c-47be-915e-1403bc84c9c2",
+                     "phase":  "Running",
+                     "node":  "ai-cve-lab",
+                     "serviceAccount":  "beifong-workload",
+                     "automountServiceAccountToken":  false,
+                     "container":  {
+                                       "name":  "beifong",
+                                       "image":  "lab/beifong-boundary-model:chapter3-v1",
+                                       "imageId":  "docker://sha256:52d7e1d6ab6b2e82a0edf2c96146f1c1dde4b88648246fc04d85eb80a72284db",
+                                       "containerId":  "docker://79e2e90d7064f9f9a340fef5f86c4e098ced90cfbac36447ee38b9ad0225ce4d",
+                                       "restartCount":  0
+                                   }
+                 },
+    "canaryVolumeBoundary":  {
+                                 "intendedBusinessDirectory":  "/app/podcasts/audio",
+                                 "mountedDirectory":  "/var/run/lab-canary",
+                                 "canaryPath":  "/var/run/lab-canary/beifong-outside-audio.txt",
+                                 "mountReadOnly":  true,
+                                 "volumeName":  "boundary-canaries",
+                                 "volumeType":  "secret",
+                                 "sourceName":  "boundary-canaries",
+                                 "processCanReadCanary":  true
+                             },
+    "interpretationLimit":  "This establishes the filesystem scope visible to the Beifong process. It does not by itself prove an HTTP traversal response, host/node access, Kubernetes API access, or disclosure of a real secret."
+}

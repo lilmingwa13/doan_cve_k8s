@@ -1,0 +1,17 @@
+﻿{
+    "schemaVersion":  "paperclip-marker-scope-v2",
+    "capturedAtUtc":  "2026-10-14T10:35:03.8550096Z",
+    "campaignId":  "CH3-20261014",
+    "runId":  "CH3-PAPERCLIP-L1-001",
+    "checkpoint":  "T2",
+    "target":  "paperclip-exposed",
+    "podName":  "paperclip-exposed-649ff6678-lckcc",
+    "podUid":  "d7c9a84d-5557-4356-923a-cf33c0d6b037",
+    "imageId":  "docker://sha256:81aa0a753f8b3102af65f21800e708e3f12d97adc5c1511bbbcedf4764b4e0fa",
+    "containerId":  "docker://ff328b1dc37214c64e4e24819128c39b6ac3702c17a1803b8ef29c1b162f6de7",
+    "restartCount":  0,
+    "markerPath":  "/workspace/repo/.paperclip/lab-agent-key-scope-marker",
+    "markerPresent":  true,
+    "executionIdentity":  "uid=1000(node) gid=1000(node) groups=1000(node)",
+    "scope":  "disposable emptyDir under /workspace/repo/.paperclip; not node or cluster storage"
+}

@@ -1,0 +1,9 @@
+_state
+evidence
+images/*/app
+images/*/dist
+**/.git
+**/node_modules
+**/__pycache__
+**/*.pyc
+*.stackdump

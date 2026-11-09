@@ -1,0 +1,9 @@
+# Trạng thái cluster minikube cục bộ: chứa cert/khoá riêng, kubeconfig và cache image (~8 GB).
+_state/
+
+# minikube.exe (~131 MB) vượt giới hạn 100 MB/file của GitHub.
+# Tải lại từ https://minikube.sigs.k8s.io/docs/start/ và đặt vào tools/minikube/minikube.exe
+tools/minikube/minikube.exe
+
+__pycache__/
+*.pyc
